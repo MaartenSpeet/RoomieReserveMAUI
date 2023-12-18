@@ -1,0 +1,15 @@
+﻿@page "/settings"
+@using Components.Data
+
+<h1>settings</h1>
+
+@code {
+    protected override void OnInitialized()
+    {
+        pm.BackPage = "/";
+        pm.ValuesChanged.Invoke();
+    }
+
+    [CascadingParameter]
+    public PageManager pm { get; set; }
+}
