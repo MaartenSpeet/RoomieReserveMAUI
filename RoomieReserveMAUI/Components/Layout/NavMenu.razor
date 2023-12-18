@@ -1,0 +1,31 @@
+﻿@using Components.Data
+
+<div class="rounded-bottom">
+	<nav class="flex justify-content-center align-items-start gap-2">
+		<div class="nav-item p-3">
+			<a class="nav-link" href="@pm.BackPage">
+				<span class="oi oi-arrow-thick-left" aria-hidden="true"></span>
+			</a>
+		</div>
+		<div class="nav-item p-3">
+			<a class="nav-link" href="/">
+				<Logo></Logo>
+			</a>
+		</div>
+		<div class="nav-item p-3">
+			<a class="nav-link" href="/groupies">
+				<span class="oi oi-person" aria-hidden="true"></span>
+			</a>
+		</div>
+	</nav>
+</div>
+
+@code {
+	protected override void OnInitialized()
+	{
+		pm.ValuesChanged += () => StateHasChanged();
+	}
+
+	[CascadingParameter]
+	public PageManager pm { get; set; }
+}

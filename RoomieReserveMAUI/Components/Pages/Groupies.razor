@@ -1,0 +1,16 @@
+﻿@page "/groupies"
+@using Components.Data
+
+<h1>Groupies</h1>
+<a href="/boxies">Open Boxie</a>
+
+@code {
+    protected override void OnInitialized()
+    {
+        pm.BackPage = "/";
+        pm.ValuesChanged.Invoke();
+    }
+
+    [CascadingParameter]
+    public PageManager pm { get; set; }
+}
