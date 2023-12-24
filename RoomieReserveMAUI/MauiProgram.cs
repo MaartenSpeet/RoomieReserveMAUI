@@ -15,13 +15,13 @@ namespace RoomieReserveMAUI
 				});
 
 			builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddHttpClient();
 
 #if DEBUG
-			builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddBlazorWebViewDeveloperTools();
 			builder.Logging.AddDebug();
 #endif
-
-			return builder.Build();
+            return builder.Build();
 		}
 	}
 }

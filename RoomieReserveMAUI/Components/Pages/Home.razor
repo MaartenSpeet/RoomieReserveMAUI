@@ -1,15 +1,29 @@
 ﻿@page "/"
 @using Components.Data
+@inject NavigationManager NavigationManager
 
 <h1>Home</h1>
 
 @code {
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         pm.BackPage = "/";
         pm.ValuesChanged.Invoke();
+
+        await CheckUserState();
     }
 
     [CascadingParameter]
     public PageManager pm { get; set; }
+
+    [CascadingParameter]
+    public User user { get; set; }
+
+    async Task CheckUserState()
+    {
+        if (user == null)
+        {
+            await Task.Run(() => NavigationManager.NavigateTo("/login"));
+        }
+    }
 }

@@ -1,23 +1,61 @@
 ﻿@inherits LayoutComponentBase
 @using Components.Data
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
 
-<CascadingValue Value="@pm">
-	<div class="page">
-		<div class="sidebar rounded-b-3xl">
-			<NavMenu />
-		</div>
+<CascadingValue Value="@user">
+    <CascadingValue Value="@pm">
+	    <div class="page">
+		    <div class="sidebar rounded-b-3xl">
+			    <NavMenu />
+		    </div>
 
-		<main>
-			<article class="content px-4">
-				@Body
-			</article>
-		</main>
-	</div>
+		    <main>
+			    <article class="content px-4">
+				    @Body
+			    </article>
+		    </main>
+	    </div>
+    </CascadingValue>
 </CascadingValue>
 
 @code {
-	public PageManager pm = new PageManager()
-		{
-			BackPage = "/"
-		};
+    public PageManager pm = new PageManager()
+    {
+        BackPage = "/"
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        using (HttpClient client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            try
+            {
+                await ProcessGetUserAsync(client);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception (log it, display an error message, etc.)
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+    }
+
+    static int UserId = 1;
+    public string? userData;
+    public User? user;
+
+    async Task ProcessGetUserAsync(HttpClient client)
+    {
+
+        var json = await client.GetStringAsync(
+         $"http://20.86.123.81:80/api/v1/users/{UserId}"
+        );
+
+        userData = json;
+
+        user = JsonConvert.DeserializeObject<User>(userData);
+    }
 }
