@@ -1,16 +1,67 @@
 ﻿@page "/groupies"
-@using Components.Data
+@inject HttpClient Http
 
 <h1>Groupies</h1>
-<a href="/boxies">Open Boxie</a>
+
+<div class="group-container">
+    @foreach (var group in groups)
+    {
+        <div class="group-card" id="@($"group{group.Id}")">
+            <div class="edit-icon" @onclick="() => EditGroup(group)">✎</div>
+            <div class="delete-icon" @onclick="() => DeleteGroup(group)">✖</div>
+            <div class="group-title">@group.Name</div>
+        </div>
+    }
+</div>
+
+<button class="add-button" @onclick="AddGroup">+</button>
 
 @code {
-    protected override void OnInitialized()
+    private List<Group> groups = new List<Group>();
+    private string newGroupName;
+    private string editingGroupName;
+    private Group editingGroup;
+
+    protected override async Task OnInitializedAsync()
     {
-        pm.BackPage = "/";
-        pm.ValuesChanged.Invoke();
+        groups = await Http.GetFromJsonAsync<List<Group>>("api/groups");
     }
 
-    [CascadingParameter]
-    public PageManager pm { get; set; }
+    private void AddGroup()
+    {
+        var newGroup = new Group { Id = groups.Any() ? groups.Max(g => g.Id) + 1 : 1, Name = newGroupName };
+        groups.Add(newGroup);
+        newGroupName = string.Empty; // Reset de nieuwe groep naam voor de volgende invoer
+    }
+
+    private void EditGroup(Group group)
+    {
+        editingGroup = group;
+        editingGroupName = group.Name; // Zet de bestaande naam in de bewerkingsveld
+    }
+
+    private void SaveGroup()
+    {
+        var groupToEdit = groups.FirstOrDefault(g => g.Id == editingGroup.Id);
+        if (groupToEdit != null)
+        {
+            groupToEdit.Name = editingGroupName;
+        }
+        editingGroup = null;
+        editingGroupName = string.Empty; // Reset de bewerkingsveld voor de volgende keer
+    }
+
+    private void DeleteGroup(Group group)
+    {
+        if (group != null)
+        {
+            groups.Remove(group);
+        }
+    }
+
+    public class Group
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
 }
