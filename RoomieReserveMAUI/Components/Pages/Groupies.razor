@@ -3,7 +3,19 @@
 @inject NavigationManager NavigationManager
 
 <h1>Groupies</h1>
-<a href="/boxies">Open Boxie</a>
+
+<div class="group-container">
+    @foreach (var group in groups)
+    {
+        <div class="group-card" id="@($"group{group.Id}")">
+            <div class="edit-icon" @onclick="() => EditGroup(group)">✎</div>
+            <div class="delete-icon" @onclick="() => DeleteGroup(group)">✖</div>
+            <div class="group-title">@group.Name</div>
+        </div>
+    }
+</div>
+
+<button class="add-button" @onclick="AddGroup">+</button>
 
 @code {
     protected override async Task OnInitializedAsync()
