@@ -5,18 +5,14 @@
 <h1>Groupies</h1>
 
 <div class="group-container">
-    @foreach (var group in groups)
-    {
-        <div class="group-card" id="@($"group{group.Id}")">
-            <div class="edit-icon" @onclick="() => EditGroup(group)">✎</div>
-            <div class="delete-icon" @onclick="() => DeleteGroup(group)">✖</div>
-            <div class="group-title">@group.Name</div>
+        <div class="group-card">
+            <div class="edit-icon" >✎</div>
+            <div class="delete-icon">✖</div>
+            <div class="group-title"></div>
         </div>
-    }
 </div>
 
-<button class="add-button" @onclick="AddGroup">+</button>
-
+<button class="add-button">+</button>
 @code {
     protected override async Task OnInitializedAsync()
     {

@@ -1,77 +1,48 @@
 @page "/account"
-@inject IUserService UserService
+@using Components.Data
 @inject NavigationManager NavigationManager
 
-@if (user != null)
-{
     <h1>Your account</h1>
 
     <div class="account-info">
         <div class="info-section">
             <label>Username</label>
-            <p>@user.Username</p>
+            <p></p>
         </div>
         <div class="info-section">
             <label>Email</label>
-            <p>@user.Email</p>
+            <p></p>
         </div>
         <div class="info-section">
             <label>Password</label>
             <p>********</p>
-            <button class="link-button" @onclick="ShowChangePassword">Change password</button>
-        </div>
-        <div class="info-section">
-            <label>Your friends</label>
-            <div class="friends-list">
-                @foreach (var friend in user.Friends)
-                {
-                    <span class="friend-icon">@friend</span>
-                }
-                <button class="add-friend">+</button>
-            </div>
+            <button class="link-button">Change password</button>
         </div>
     </div>
 
-    <button class="sign-out-button" @onclick="SignOut">Sign Out</button>
-    <button class="delete-account-link" @onclick="DeleteAccount">Delete account?</button>
-}
-else
-{
-    <p>Loading...</p>
-}
+    <button class="sign-out-button">Sign Out</button>
+    <button class="delete-account-link">Delete account?</button>
 
 @code {
-    private User user = new User // Simuleer ingelogde gebruiker
+    protected override async Task OnInitializedAsync()
+    {
+        pm.BackPage = "/";
+        pm.ValuesChanged.Invoke();
+
+        await CheckUserState();
+    }
+
+    [CascadingParameter]
+    public PageManager pm { get; set; }
+
+    [CascadingParameter]
+    public User user { get; set; }
+
+    async Task CheckUserState()
+    {
+        if (user == null)
         {
-            Username = "Sally Alsayed",
-            Email = "sal.ly@gmail.com",
-            Friends = new List<string> { "Friend1", "Friend2", "Friend3" }
-        };
-
-    private void ShowChangePassword()
-    {
-        // Toon een wijzig wachtwoord dialoog. Dit is een placeholder voor je eigen implementatie.
-        var newPassword = "newPassword"; // Dit moet je ophalen uit een gebruikersinvoer uit een dialoog.
-        UserService.ChangePassword(user.Id, newPassword);
-    }
-
-    private void SignOut()
-    {
-        UserService.SignOut();
-        NavigationManager.NavigateTo("/login");
-    }
-
-    private void DeleteAccount()
-    {
-        UserService.DeleteAccount(user.Id);
-        NavigationManager.NavigateTo("/login");
-    }
-
-    // Gebruikersklasse (normaal gesproken in een apart bestand)
-    public class User
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public List<string> Friends { get; set; }
+            await Task.Run(() => NavigationManager.NavigateTo("/login"));
+        }
     }
 }
