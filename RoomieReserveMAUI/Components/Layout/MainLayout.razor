@@ -7,7 +7,7 @@
     <CascadingValue Value="@pm">
         <CascadingValue Value="@color">
 	        <div class="page">
-		        <div class="sidebar rounded-b-3xl">
+		        <div class="@color sidebar rounded-b-3xl">
 			        <NavMenu />
 		        </div>
 
@@ -29,6 +29,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        color.color = "red";
+
         using (HttpClient client = new HttpClient())
         {
             client.DefaultRequestHeaders.Accept.Clear();
@@ -49,7 +51,7 @@
     public string? userData;
     public User? user;
 
-    public string color;
+    public Color? color;
 
     async Task ProcessGetUserAsync(HttpClient client)
     {

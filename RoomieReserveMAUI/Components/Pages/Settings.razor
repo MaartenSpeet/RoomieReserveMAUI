@@ -29,7 +29,7 @@
     public User user { get; set; }
 
     [CascadingParameter]
-    public Color color { get; set; }
+    public Color? color { get; set; }
 
     async Task CheckUserState()
     {
@@ -45,11 +45,11 @@
 
         if (selectedTheme == "1")
         {
-            
+            color.color = "blue";
         }
         else if (selectedTheme == "2")
         {
-
+            color.color = "darkblue";
         } 
         else if (selectedTheme == "3")
         {

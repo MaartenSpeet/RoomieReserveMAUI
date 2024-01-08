@@ -8,6 +8,6 @@ namespace RoomieReserveMAUI.Components.Data
 {
     public class Color
     {
-        string color {  get; set; }
+        public string color {  get; set; }
     }
 }
