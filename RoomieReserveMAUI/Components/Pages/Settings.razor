@@ -4,6 +4,15 @@
 
 <h1>settings</h1>
 
+<select name="one" class="dropdown-select" @onchange="ThemeChanged">
+    <option value="">select theme</option>
+    <option value="1">light(blue)</option>
+    <option value="2">dark(blue)</option>
+    <option value="3">light(red)</option>
+    <option value="4">dark(red)</option>
+    <option value="5">high contrast</option>
+</select>
+
 @code {
     protected override async Task OnInitializedAsync()
     {
@@ -26,4 +35,31 @@
             await Task.Run(() => NavigationManager.NavigateTo("/login"));
         }
     }
+
+    private void ThemeChanged(ChangeEventArgs e)
+    {
+        string selectedTheme = e.Value?.ToString();
+
+        if (selectedTheme == "1")
+        {
+
+        }
+        else if (selectedTheme == "2")
+        {
+
+        } 
+        else if (selectedTheme == "3")
+        {
+
+        }
+        else if (selectedTheme == "4")
+        {
+
+        }
+        else if (selectedTheme == "5")
+        {
+            
+        }
+    }
+
 }
