@@ -1,8 +1,16 @@
 ﻿@page "/items"
 @using Components.Data
+@using Newtonsoft.Json
 @inject NavigationManager NavigationManager
 
 <h1>Items</h1>
+<h2>
+    @item?.Id
+    @item?.Name
+    @item?.Owner_Id
+    @item?.Boxie_Id
+    @item?.BestBefore
+</h2>
 
 @code {
     protected override async Task OnInitializedAsync()
@@ -10,13 +18,46 @@
         pm.BackPage = "/boxies";
         pm.ValuesChanged.Invoke();
 
+        using (HttpClient client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            try
+            {
+                await ProcessGetItemAsync(client);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception (log it, display an error message, etc.)
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
         await CheckUserState();
     }
 
     [CascadingParameter]
     public PageManager pm { get; set; }
 
-        [CascadingParameter]
+    static int groupieId = 1;
+
+    public string? itemData;
+
+    public Item? item;
+
+    async Task ProcessGetItemAsync(HttpClient client)
+    {
+
+        var json = await client.GetStringAsync(
+         $"http://20.86.123.81:80/api/v1/items/{groupieId}"
+        );
+
+        itemData = json;
+
+        item = JsonConvert.DeserializeObject<Item>(itemData);
+    }
+
+    [CascadingParameter]
     public User user { get; set; }
 
     async Task CheckUserState()
