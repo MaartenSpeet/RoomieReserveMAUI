@@ -5,17 +5,19 @@
 
 <CascadingValue Value="@user">
     <CascadingValue Value="@pm">
-	    <div class="page">
-		    <div class="sidebar rounded-b-3xl">
-			    <NavMenu />
-		    </div>
+        <CascadingValue Value="@color">
+	        <div class="page">
+		        <div class="sidebar rounded-b-3xl">
+			        <NavMenu />
+		        </div>
 
-		    <main>
-			    <article class="content px-4">
-				    @Body
-			    </article>
-		    </main>
-	    </div>
+		        <main>
+			        <article class="content px-4">
+				        @Body
+			        </article>
+		        </main>
+	        </div>
+        </CascadingValue>
     </CascadingValue>
 </CascadingValue>
 
@@ -46,6 +48,8 @@
     static int UserId = 2;
     public string? userData;
     public User? user;
+
+    public string color;
 
     async Task ProcessGetUserAsync(HttpClient client)
     {
